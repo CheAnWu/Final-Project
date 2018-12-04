@@ -12,7 +12,7 @@ class CardPool:
     def __init__(self, deck):
         self.deck = deck
         CardPool.current_pool = CardPool.suit * 4 * self.deck
-        random.shuffle(CardPool.current_pool) #建立cardpool实体时即完成洗牌
+        random.shuffle(CardPool.current_pool)   #建立cardpool实体时即完成洗牌
 
     def drawCard(self):
         t = self.current_pool.pop(0)
@@ -20,65 +20,55 @@ class CardPool:
         print(len(self.current_pool))
         return t
 
-#class Player:
-#    def __init__(self):
-#     palyer_sum = 0
-#     def __init__(self):
-#     def playerDraw(self,):
-#         player_sum = drawCard()
-
-def initCard(self):
-    pc1 = c.drawCard()  # player明牌
-    player_sum = pc1
-    if pc1 == 1:
-        player_ace = 1
-        player_sum += 10
-    else:
-        player_ace = 0
-
-    dc1 = c.drawCard()  # dealer明牌
-    dealer_sum = dc1
-    if dc1 == 1:
-        dealer_ace = 1
-        dealer_sum += 10
-    else:
-        dealer_ace = 0
-
-    pc2 = c.drawCard()  # player第二张明牌
-    player_sum = player_sum + pc2
-    if pc2 == 1:
-        player_ace += 1
-        player_sum += 10
-
-    dc2 = c.drawCard()  # dealer第二张暗牌
-    dealer_sum = dealer_sum + dc2
-    if dc2 == 1:
-        dealer_ace += 1
-        dealer_sum += 10
-
-def playerSplit(self):
-        if pc2 == 1:
-            player_ace -= 1
-            player_sum = player_sum - 10
-
-            player_ace_s = 1
-            player_sum_s = 11
+    def initCard(self, sum, ace):
+        card = self.drawCard()
+        sum = card + sum
+        if card == 1:
+            ace += 1
+            sum += 10
         else:
-            player_sum = player_sum - pc2
-            player_ace_s =0
-            player_sum_s = pc2
+            ace += 0
+        return (sum, ace)
 
-        pc2 = c.drawCard()#给pc1补牌
-        if pc2 == 1:
-            player_ace += 1
-            player_sum += 10
-        player_sum += pc2
+class Dealer:
+    def __init__(self):
+        self.dealer_sum = 0
+        self.dealer_ace = 0
 
-        p2c2 = c.drawCard() #给分出的牌补牌
-        if p2c2 == 1:
-            player_ace_s += 1
-            player_sum_s += 10
-        player_sum_s += p2c2
+class Player:
+    def __init__(self,standPoint):
+        self.standPoint = standPoint
+        self.palyer_sum = 0
+        self.player_ace = 0
+        self.palyer_sum_s = 0
+        self.player_ace_s = 0
+
+    # @property
+    # def split_ace(self):
+    #     return self._split_ace
+    # @split_ace.setter
+    # def split_ace(self, value):
+    #     if not isinstance(value, bool):
+    #         raise ValueError('split ace must be an bool!')
+    #     self._split_ace = value
+
+    @property
+    def splitflag(self):
+        return self._splitflag
+    @splitflag.setter
+    def splitflag(self, value):
+        if not isinstance(value, bool):
+            raise ValueError('split flag must be an bool!')
+        self._splitflag = value
+
+    def playerSplit(sum, ace):
+        sum = sum/2
+        if ace == 2:
+            ace = 1
+        else:
+            ace = 0
+        return (sum, ace)
+
 
 def if_bust(sum, ace):
     while sum > 21:
@@ -88,60 +78,126 @@ def if_bust(sum, ace):
         else:
             break
     if sum > 21:
-        return -1
+        return (-1,ace)
     else:
-        break
+        return (sum,ace)
 
-def playerStand(self,standPoint):
-def playerHit(self):
 
-def Game(self, nplayer,splitChoice,): #if splitChoice is True, always split if allowed
+def Game(nplayer,splitChoice,): #if splitChoice is True, always split if allowed
 
     c = CardPool(6)
-    initCard()
+    p1 = Player(15)
+    dealer = Dealer()
 
-    # 发牌结束，玩家move
-    if splitChoice == True:
-        if pc1 == pc2:
-            playerSplit()
-            splitFlag = True
+    current_score = c.initCard(p1.player_sum, p1.player_ace)
+    p1.player_sum = current_score[0]
+    p1.player_ace = current_score[1]
+
+    current_score = c.initCard(dealer.dealer_sum, dealer.dealer_ace)
+    dealer.dealer_sum = current_score[0]
+    dealer.dealer_ace = current_score[1]
+
+    current_score = c.initCard(p1.player_sum, p1.player_ace)
+    if current_score[0] - p1.player_sum == p1.player_sum: #判断两张牌是否相等及是否要分牌
+        if splitChoice == True:
+            p1.splitflag = True
+            # if p1.player_ace == 1:
+            #     p1.split_ace = True
+            # else:
+            #     p1.split_ace = False
         else:
-            break
+            p1.splitflag = False
+    p1.player_sum = current_score[0]
+    p1.player_ace = current_score[1]
 
-    while player_sum <= standPoint:
-        pc_n = c.drawCard()
-        player_sum += pc_n
-        if pc_n == 1:
-            player_ace += 1
-            player_sum += 10
+    current_score = c.initCard(dealer.dealer_sum, dealer.dealer_ace) #dealer暗牌
+    dealer.dealer_sum = current_score[0]
+    dealer.dealer_ace = current_score[1]
 
-    if_bust(player_sum, player_ace)
+    if p1.splitflag == True: #分牌在庄家发完暗牌之后
+        current_score = p1.playerSplit(p1.player_sum,p1.player_ace)
+        p1.player_sum = current_score[0]
+        p1.player_ace = current_score[1] #分牌后的牌A
 
-    #if splitFlag == True:
+        p1.player_sum_s = current_score[0]
+        p1.player_ace_s = current_score[1]  #分牌后的牌B
 
-    #dealer move
-    while delaer_sum < 17:
-        dl_n = c.drawCard()
-        dealer_sum += pc_n
-    if dl_n == 1:
-        dealer_ace += 1
-        dealer_sum += 10
-    if_bust(dealer_sum, dealer_ace)
+        current_score = c.initCard(p1.player_sum, p1.player_ace)
+        p1.player_sum = current_score[0]
+        p1.player_ace = current_score[1]  #牌A补牌
 
+        current_score = c.initCard(p1.player_sum_s, p1.player_ace_s)
+        p1.player_sum_s = current_score[0]
+        p1.player_ace_s = current_score[1]  #牌B补牌
 
-    #未爆牌玩家与未爆牌的dealer比大小
-    if result not in [1,-1]:
-        if dealer_sum > player_sum:
+    ######################
+    #发牌结束，玩家move;要牌或爆牌
+
+    while p1.player_sum < p1.standPoint:
+        current_score = c.initCard(p1.player_sum,p1.player_ace)
+        p1.player_sum = current_score[0]
+        p1.player_ace = current_score[1]
+
+        r = if_bust(p1.player_sum, p1.player_ace)
+        if r[0] == -1: #玩家爆牌
             result = -1
-        if dealer_sum < player_sum
-            result = 1
-        if dealer_sum == player_sum
-            result = 0
+            break
+        else:
+            p1.player_sum = r[0]
+            p1.player_ace = r[1]
 
+    if p1.palyer_sum_s != 0:
+        while p1.player_sum_s < p1.standPoint:
+            current_score = c.initCard(p1.player_sum_s, p1.player_ace_s)
+            p1.player_sum_s = current_score[0]
+            p1.player_ace_s = current_score[1]
+
+            r = if_bust(p1.player_sum_s, p1.player_ace_s)
+            if r[0] == -1:  # 玩家爆牌
+                result = -1
+                break
+            else:
+                p1.player_sum_s = r[0]
+                p1.player_ace_s = r[1]
+
+    #dealer's move
+    else:
+        while dealer.dealer_sum < 17:
+            current_score = c.initCard(dealer.dealer_sum, dealer.dealer_ace)
+            dealer.dealer_sum = current_score[0]
+            dealer.dealer_ace = current_score[1]
+
+            r = if_bust(dealer.dealer_sum, dealer.dealer_ace)
+            if r[0]==-1: #庄家爆牌
+                result = 1
+                break
+            else:
+                dealer.dealer_sum = r[0]
+                dealer.dealer_ace = r[1]
+
+    #玩家、庄家均未爆牌且庄家牌超过17，比较结果
+    if result == -1:
+        return result
+    elif result == 1:
+        return result
+    else:
+        result = turn(p1.player_sum,dealer.dealer_sum)
+        if p1.splitflag == 1:
+            result = turn(p1.player_sum_s, dealer.dealer_sum)
     return result
+
+########
+def turn(player_sum, dealer_sum):
+    if player_sum == 21:
+       return
+    elif player_sum > dealer_sum:
+        return 1
+    elif player == dealer_sum:
+        return 0
+    elif player < dealer_sum
+        return -1
 
 # def MonteGame(times,standpoint):
 #     for i in range(1,times):
 #         t = Game(standpoint)
 #         i += 1
-#

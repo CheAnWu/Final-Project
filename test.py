@@ -11,11 +11,10 @@ class CardPool:
 
     def drawCard(self):
         t = self.current_pool.pop(0)
-        print(self.current_pool)
-        print(len(self.current_pool))
-        print(t)
+        #print(self.current_pool)
+        #print(len(self.current_pool))
+        #print(t)
         return t
 
 c = CardPool(5)
-c.drawCard()
-c.drawCard()
+#print(c.drawCard())

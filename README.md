@@ -41,5 +41,6 @@ List and describe your simulation's variables of uncertainty (where you're using
     
     庄家逐位询问玩家是否加牌、直至闲家不加牌才询问下一位玩家，轮流询问玩家直至最后一位玩家加牌完成
     庄家如不足17点便需加牌直至超过或等于17点
+    
     对未有爆牌的玩家，比点数大小，大者胜，可得赔金; 如庄家爆牌、未有爆牌的玩家便可得赔金
     回收已使用的牌及打赏
