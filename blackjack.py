@@ -3,7 +3,7 @@ import random
 import math
 import matplotlib.pyplot as plt
 
-#Monte(15, 1000000, 8, 2) #turning point, monte times, deck, player)
+#Monte(15, 1000000, 8, 2) #stand point, monte times, deck, player)
 
 class CardPool:
     suit = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
@@ -116,10 +116,10 @@ def turn(player_sum, dealer_sum):
     return r
 
 
-def Game(splitChoice): #nplayer #if splitChoice is True, always split if allowed
+def Game(splitChoice, deck, standpoint): #nplayer #if splitChoice is True, always split if allowed
 
-    c = CardPool(6)
-    p1 = Player(15)
+    c = CardPool(deck)
+    p1 = Player(standpoint)
     dealer = Dealer()
 
     current_score = c.initCard(p1.player_sum, p1.player_ace)
@@ -224,7 +224,7 @@ def Game(splitChoice): #nplayer #if splitChoice is True, always split if allowed
 
     return result
 
-print(Game(True))
+print(Game(True,6,14))
 
 ########
 # def MonteGame(times,standpoint):
