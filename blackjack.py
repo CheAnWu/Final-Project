@@ -1,9 +1,8 @@
-import numpy as np
 import random
-import math
-import matplotlib.pyplot as plt
-
-#Monte(15, 1000000, 8, 2) #stand point, monte times, deck, player)
+import numpy as np
+import pandas as pd
+#import math
+#import matplotlib.pyplot as plt
 
 class CardPool:
     suit = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
@@ -34,6 +33,15 @@ class Dealer:
     def __init__(self):
         self.dealer_sum = 0
         self.dealer_ace = 0
+
+    # @property
+    # def dealershow(self):
+    #     return self._dealershow
+    # @dealershow.setter
+    # def dealershow(self, value):
+    #     if not isinstance(value, int):
+    #         raise ValueError('dealershow must be an int!')
+    #     self._dealershow = value
 
 class Player:
     def __init__(self,standPoint):
@@ -77,7 +85,7 @@ class Player:
     @property
     def bust(self):
         return self._bust
-    @splitflag.setter
+    @bust.setter
     def bust(self, value):
         if not isinstance(value, int):
             raise ValueError('bust flag must be int!')
@@ -85,12 +93,12 @@ class Player:
 
     @property
     def bust_s(self):
-        return self._bust
-    @splitflag.setter
+        return self._bust_s
+    @bust_s.setter
     def bust_s(self, value):
         if not isinstance(value, int):
             raise ValueError('bust flag must be int!')
-        self._bust = value
+        self._bust_s = value
 
 def if_bust(sum, ace):
     while sum > 21:
@@ -115,6 +123,8 @@ def turn(player_sum, dealer_sum):
 
     return r
 
+def dealer_print(d,value):
+    d = d.append({'dealershow'}: value},ignore_index = True)
 
 def Game(splitChoice, deck, standpoint): #nplayer #if splitChoice is True, always split if allowed
 
@@ -125,12 +135,15 @@ def Game(splitChoice, deck, standpoint): #nplayer #if splitChoice is True, alway
     current_score = c.initCard(p1.player_sum, p1.player_ace)
     p1.player_sum = current_score[0]
     p1.player_ace = current_score[1]
-    print('p1',p1.player_sum)
+    #print('p1',p1.player_sum)
 
     current_score = c.initCard(dealer.dealer_sum, dealer.dealer_ace)
     dealer.dealer_sum = current_score[0]
     dealer.dealer_ace = current_score[1]
-    print('d1',dealer.dealer_sum)
+
+    #dealer.dealershow = current_score[0]
+    #print('d1',dealer.dealer_sum)
+    dealer_print(result_frame,current_score[0])
 
     current_score = c.initCard(p1.player_sum, p1.player_ace)
     if current_score[0] - p1.player_sum == p1.player_sum: #判断两张牌是否相等及是否要分牌
@@ -142,12 +155,12 @@ def Game(splitChoice, deck, standpoint): #nplayer #if splitChoice is True, alway
             #     p1.split_ace = False
     else:
         p1.splitflag = False
-        print('p2', current_score[0] - p1.player_sum)
+        #print('p2', current_score[0] - p1.player_sum)
     p1.player_sum = current_score[0]
     p1.player_ace = current_score[1]
 
     current_score = c.initCard(dealer.dealer_sum, dealer.dealer_ace) #dealer暗牌
-    print('d2', current_score[0] - dealer.dealer_sum)
+    #print('d2', current_score[0] - dealer.dealer_sum)
     dealer.dealer_sum = current_score[0]
     dealer.dealer_ace = current_score[1]
 
@@ -158,16 +171,16 @@ def Game(splitChoice, deck, standpoint): #nplayer #if splitChoice is True, alway
         p1.player_ace = current_score[1] #分牌后的牌A
 
         p1.player_sum_s = current_score[0]
-        print('ps1', p1.player_sum_s)
+        #print('ps1', p1.player_sum_s)
         p1.player_ace_s = current_score[1]  #分牌后的牌B
 
         current_score = c.initCard(p1.player_sum, p1.player_ace)
-        print('p2', current_score[0] - p1.player_sum)
+        #print('p2', current_score[0] - p1.player_sum)
         p1.player_sum = current_score[0]
         p1.player_ace = current_score[1]  #牌A补牌
 
         current_score = c.initCard(p1.player_sum_s, p1.player_ace_s)
-        print('ps2', current_score[0] - p1.player_sum_s)
+        #print('ps2', current_score[0] - p1.player_sum_s)
         p1.player_sum_s = current_score[0]
         p1.player_ace_s = current_score[1]  #牌B补牌
 
@@ -176,7 +189,7 @@ def Game(splitChoice, deck, standpoint): #nplayer #if splitChoice is True, alway
 
     while p1.player_sum < p1.standPoint:
         current_score = c.initCard(p1.player_sum,p1.player_ace)
-        print('pn', current_score[0] - p1.player_sum)
+        #print('pn', current_score[0] - p1.player_sum)
         p1.player_sum = current_score[0]
         p1.player_ace = current_score[1]
 
@@ -191,7 +204,7 @@ def Game(splitChoice, deck, standpoint): #nplayer #if splitChoice is True, alway
     if p1.splitflag == True:
         while p1.player_sum_s < p1.standPoint:
             current_score = c.initCard(p1.player_sum_s, p1.player_ace_s)
-            print('psn', current_score[0] - p1.player_sum_s)
+            #print('psn', current_score[0] - p1.player_sum_s)
             p1.player_sum_s = current_score[0]
             p1.player_ace_s = current_score[1]
 
@@ -205,30 +218,30 @@ def Game(splitChoice, deck, standpoint): #nplayer #if splitChoice is True, alway
 
     #dealer's move
     if ((p1.bust == -1) and (p1.splitflag == False)): #未split，爆牌，游戏结束
-        print('玩家未分牌，爆')
+        #print('玩家未分牌，爆')
         return -1
 
     elif((p1.bust_s ==-1) and (p1.bust == -1)): #两手牌均爆，游戏结束
-        print('玩家两手牌均爆')
+        #print('玩家两手牌均爆')
         return -2
 
     else: #至少1手未爆牌
         while dealer.dealer_sum < 17:
             current_score = c.initCard(dealer.dealer_sum, dealer.dealer_ace)
-            print('dn', current_score[0] - dealer.dealer_sum)
+            #print('dn', current_score[0] - dealer.dealer_sum)
 
             dealer.dealer_sum = current_score[0]
             dealer.dealer_ace = current_score[1]
             r = if_bust(dealer.dealer_sum, dealer.dealer_ace)
             if r[0] == -1:  # 庄家爆牌
                 if p1.splitflag == False:
-                    print('庄家爆牌玩家未分未爆')
+                    #print('庄家爆牌玩家未分未爆')
                     return 1
                 elif ((p1.bust!=-1) and (p1.bust_s!= -1)):
-                    print('庄家爆牌玩家2未爆')
+                    #print('庄家爆牌玩家2未爆')
                     return 2
                 else:
-                    print('庄家爆牌玩家1赢1爆')
+                    #print('庄家爆牌玩家1赢1爆')
                     return 1
             else:
                 dealer.dealer_sum = r[0]
@@ -239,24 +252,33 @@ def Game(splitChoice, deck, standpoint): #nplayer #if splitChoice is True, alway
         if ((p1.bust!=-1) and (p1.bust_s!= -1)):
             result = turn(p1.player_sum, dealer.dealer_sum)
             result = result + turn(p1.player_sum_s, dealer.dealer_sum)
-            print('分牌，庄家玩家均未爆牌',result)
+            #print('分牌，庄家玩家均未爆牌',result)
         elif ((p1.bust==-1) and (p1.bust_s!= -1)):
             result = turn(p1.player_sum_s, dealer.dealer_sum)
-            print('1爆，第二手没爆牌，庄家未爆牌', result)
+            #print('1爆，第二手没爆牌，庄家未爆牌', result)
         elif ((p1.bust!=-1) and (p1.bust_s== -1)):
             result = turn(p1.player_sum, dealer.dealer_sum)
-            print('2爆，第1手没爆牌，庄家未爆牌', result)
+            #print('2爆，第1手没爆牌，庄家未爆牌', result)
     else:
         result = turn(p1.player_sum, dealer.dealer_sum)
-        print('未分牌，均未爆牌',result)
+        #print('未分牌，均未爆牌',result)
     return result
 
-#print(Game(True,6,14))
+
+
 
 # def MonteGame(times,standpoint):
 #     for i in range(1,times):
 #         t = Game(standpoint)
 #         i += 1
-sum = 0
-for i in range(1,10):
-    print(Game(True,6,14))
+
+
+result_frame = pd.DataFrame(columns=['dealershow','result'])
+
+# for i in range(1,100000):
+#     r = Game(False,6,18)
+#     p = print(r)
+#     sum = sum + r
+
+#sum = 0
+#print(sum/100000)
