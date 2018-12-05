@@ -204,12 +204,14 @@ def Game(splitChoice, deck, standpoint): #nplayer #if splitChoice is True, alway
                 p1.player_ace_s = r[1]
 
     #dealer's move
-    if p1.bust_s ==-1 and p1.bust == -1 : #两手牌均爆，游戏结束
-        print('玩家两手牌均爆')
-        return -2
-    elif p1.bust == -1 and p1.splitflag == False : #未split，爆牌，游戏结束
+    if ((p1.bust == -1) and (p1.splitflag == False)): #未split，爆牌，游戏结束
         print('玩家未分牌，爆')
         return -1
+
+    elif((p1.bust_s ==-1) and (p1.bust == -1)): #两手牌均爆，游戏结束
+        print('玩家两手牌均爆')
+        return -2
+
     else: #至少1手未爆牌
         while dealer.dealer_sum < 17:
             current_score = c.initCard(dealer.dealer_sum, dealer.dealer_ace)
@@ -232,11 +234,18 @@ def Game(splitChoice, deck, standpoint): #nplayer #if splitChoice is True, alway
                 dealer.dealer_sum = r[0]
                 dealer.dealer_ace = r[1]
 
-    #玩家、庄家均未爆牌且庄家牌超过17，比较结果
+    #玩家至少一手未爆牌、庄家未爆牌且庄家牌超过17，比较结果
     if p1.splitflag == True:
-        result = turn(p1.player_sum, dealer.dealer_sum)
-        result = result + turn(p1.player_sum_s, dealer.dealer_sum)
-        print('分牌，庄家玩家均未爆牌',result)
+        if ((p1.bust!=-1) and (p1.bust_s!= -1)):
+            result = turn(p1.player_sum, dealer.dealer_sum)
+            result = result + turn(p1.player_sum_s, dealer.dealer_sum)
+            print('分牌，庄家玩家均未爆牌',result)
+        elif ((p1.bust==-1) and (p1.bust_s!= -1)):
+            result = turn(p1.player_sum_s, dealer.dealer_sum)
+            print('1爆，第二手没爆牌，庄家未爆牌', result)
+        elif ((p1.bust!=-1) and (p1.bust_s== -1)):
+            result = turn(p1.player_sum, dealer.dealer_sum)
+            print('2爆，第1手没爆牌，庄家未爆牌', result)
     else:
         result = turn(p1.player_sum, dealer.dealer_sum)
         print('未分牌，均未爆牌',result)
