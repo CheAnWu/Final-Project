@@ -15,7 +15,7 @@ Since we simulate a 6-deck situation which the number of cards is large, it is n
 
 ## Hypothesis or hypotheses before running the simulation:
 Player's options: Hit/Stand/Split
-Input: Stand point, dec
+Input: Stand point, number of decks
 
 ## Analytical Summary of your findings: (e.g. Did you adjust the scenario based on previous simulation outcomes?  What are the management decisions one could make from your simulation's output, etc.)
 One can play 21 jack using our strategy based on his hand and the one card of dealer that is showing. We also include a pdf strategy report based on our findings in this repository.
