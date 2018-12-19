@@ -2,8 +2,8 @@
 Monte Carlo Stimulation for Blackjack
 
 ## Team Member(s):
-Che-An Wu
-Xue Lu
+Che-An Wu: wrote parts of functions/test/doctest and comments/Output of the results/analysis using jupyter
+Xue Lu: Designed and wrote classes and functions/tests/analyzed the results
 
 # Monte Carlo Simulation Scenario & Purpose:
 Find the strategy based on player and dealer's cards.
