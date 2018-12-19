@@ -21,6 +21,8 @@ Input: Stand point, number of decks
 One can play 21 jack using our strategy based on his hand and the one card of dealer that is showing. We also include a pdf strategy report based on our findings in this repository.
 
 ## Instructions on how to use the program:
+Please run the 'BlackJack_MC_final.py'. 
+
 We similate a single game with the function 'Game' and then run it for every standpoint we set for 1,000,000 times. Results are put in csv files and are analyzed using pandas and jupyter which are also uploaded to this repository.
 
 ## All Sources Used:
